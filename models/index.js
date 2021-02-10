@@ -33,6 +33,6 @@ Object.keys(db).forEach(modelName => {
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
-db.users = require('./users')(sequelize, Sequelize);
+db.users = require('./User')(sequelize, Sequelize);
 db.erd = require('./erd')(sequelize, Sequelize);
 module.exports = db;
