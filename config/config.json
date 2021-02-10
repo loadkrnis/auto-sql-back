@@ -1,0 +1,23 @@
+{
+  "development": {
+    "username": "admin",
+    "password": "autosqldb",
+    "database": "autosql",
+    "host": "auto-sql-database.czhtr0ajyvly.ap-northeast-2.rds.amazonaws.com",
+    "dialect": "mysql"
+  },
+  "test": {
+    "username": "admin",
+    "password": "autosqldb",
+    "database": "autosql",
+    "host": "auto-sql-database.czhtr0ajyvly.ap-northeast-2.rds.amazonaws.com",
+    "dialect": "mysql"
+  },
+  "production": {
+    "username": "admin",
+    "password": "autosqldb",
+    "database": "autosql",
+    "host": "auto-sql-database.czhtr0ajyvly.ap-northeast-2.rds.amazonaws.com",
+    "dialect": "mysql"
+  }
+}
