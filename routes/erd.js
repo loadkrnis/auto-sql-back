@@ -32,11 +32,9 @@ router.post('/save/:userId', function (req, res, next) {
                         res.send(result);
                     })
                     .catch((err) => {
-                        console.error(err);
-                        res.send("update fail " + err);
+                        console.error("erd/save/:userId update fail " + err);
+                        res.send("erd/save/:userId update fail " + err);
                     });
-
-                //바뀐 값 보내서 확인
             }).catch((err) => {
                 console.error(err);
                 res.json(err);
