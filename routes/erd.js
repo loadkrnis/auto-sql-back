@@ -13,14 +13,21 @@ router.post('/save/:userId', function (req, res, next) {
             res.send("userId:[" + req.params.userId + "] is not exist.");
         }
         else {
-            Erd.findOne({userId:req.params.userId, database_name:req.body.database_name}).then((result)=> {
+            Erd.findOne({
+                where: {
+                    user_idx: req.params.userId,
+                    database_name: req.body.database_name
+                }
+            }).then((result) => {
                 res.send(result);
+            }).catch((err) => {
+                console.error(err);
+                res.json(err);
             })
         }
     })
         .catch((err) => {
             console.error(err);
-            next(err);
             res.json(err);
         });
 });
