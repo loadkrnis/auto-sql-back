@@ -46,4 +46,17 @@ router.post('/save/:userId', function (req, res, next) {
             res.json(err);
         });
 });
+
+router.post('/create/:userId', function (req, res, next) {
+    Erd.create({
+        user_idx:req.params.userId,
+        erd_json:{},
+        database_name:req.body.databaseName
+    }).then((result) => {
+        res.json(result);
+    }).catch((err) => {
+        console.error(err);
+        res.send(err);
+    }) 
+});
 module.exports = router;
