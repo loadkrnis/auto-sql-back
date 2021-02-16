@@ -17,6 +17,11 @@ module.exports = function(sequelize, DataTypes) {
         key: 'idx'
       }
     },
+    database_name: {
+      type: DataTypes.STRING(255),
+      allowNull: false,
+      comment: "database_name"
+    },
     erd_json: {
       type: DataTypes.JSON,
       allowNull: false,
