@@ -1,8 +1,10 @@
 var DataTypes = require("sequelize").DataTypes;
+var _SequelizeMeta = require("./SequelizeMeta");
 var _User = require("./User");
 var _erd = require("./erd");
 
 function initModels(sequelize) {
+  var SequelizeMeta = _SequelizeMeta(sequelize, DataTypes);
   var User = _User(sequelize, DataTypes);
   var erd = _erd(sequelize, DataTypes);
 
@@ -10,6 +12,7 @@ function initModels(sequelize) {
   User.hasMany(erd, { as: "erds", foreignKey: "user_idx"});
 
   return {
+    SequelizeMeta,
     User,
     erd,
   };
