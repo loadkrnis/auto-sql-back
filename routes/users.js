@@ -21,8 +21,14 @@ router.get('/select/:userId', function (req, res, next) {
     });
 });
 
-router.post('/create/:userId', function (req, res, next) {
-  res.send(req.params.userId);
+router.post('/create', function (req, res, next) {
+  Users.create(
+    {
+      
+    }
+  ).then((result) => {
+    res.json(result);
+  })
 })
 
 module.exports = router;
