@@ -21,4 +21,8 @@ router.get('/select/:userId', function (req, res, next) {
     });
 });
 
+router.post('/create/:userId', function (req, res, next) {
+  res.send(req.params.userId);
+})
+
 module.exports = router;
