@@ -24,7 +24,10 @@ router.get('/select/:userId', function (req, res, next) {
 router.post('/create', function (req, res, next) {
   Users.create(
     {
-      
+      name:req.body.name,
+      email:req.body.email,
+      provider:req.body.provider,
+      picture:req.body.picture,
     }
   ).then((result) => {
     res.json(result);
