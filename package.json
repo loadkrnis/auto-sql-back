@@ -14,6 +14,7 @@
     "google-auth-library": "^7.0.1",
     "http-errors": "~1.6.3",
     "jade": "~1.11.0",
+    "jsonwebtoken": "^8.5.1",
     "kill-port": "^1.6.1",
     "mariadb": "^2.5.2",
     "morgan": "~1.9.1",
@@ -22,5 +23,11 @@
     "sequelize": "^6.5.0",
     "sequelize-auto": "^0.7.11",
     "sequelize-cli": "^6.2.0"
+  },
+  "devDependencies": {
+    "eslint": "^7.20.0",
+    "eslint-config-prettier": "^7.2.0",
+    "eslint-plugin-prettier": "^3.3.1",
+    "prettier": "2.2.1"
   }
 }

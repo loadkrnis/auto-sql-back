@@ -1,7 +1,7 @@
-var express = require('express');
-var router = express.Router();
-var Users = require('../models').users;
-var Erd = require('../models').erd;
+const express = require('express');
+const router = express.Router();
+const Users = require('../models').users;
+const Erd = require('../models').erd;
 /* GET users listing. */
 router.post('/save/:userId', function (req, res, next) {
     Users.findOne({
@@ -49,14 +49,14 @@ router.post('/save/:userId', function (req, res, next) {
 
 router.post('/create/:userId', function (req, res, next) {
     Erd.create({
-        user_idx:req.params.userId,
-        erd_json:{},
-        database_name:req.body.databaseName
+        user_idx: req.params.userId,
+        erd_json: {},
+        database_name: req.body.databaseName
     }).then((result) => {
         res.json(result);
     }).catch((err) => {
         console.error(err);
         res.send(err);
-    }) 
+    })
 });
 module.exports = router;
