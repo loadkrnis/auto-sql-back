@@ -8,53 +8,52 @@ router.post('/get/:databaseName', auth, (req, res) => {
     let databaseName = req.params.databaseName;
     let userIdx = req.decoded.userIdx;
     Erd.findOne({
-      where: { user_idx: userIdx, database_name: databaseName }
+        where: { user_idx: userIdx, database_name: databaseName }
     }).then((result) => {
-      if(result == null) {
-        console.error("databaseName:[" + databaseName + "] is not exist in userId:["+userIdx+"].");
-        res.send("databaseName:[" + databaseName + "] is not exist in userId:["+userIdx+"].");
-      }
-      res.json(result);
+        if (result == null) {
+            console.error("databaseName:[" + databaseName + "] is not exist in userId:[" + userIdx + "].");
+            res.send("databaseName:[" + databaseName + "] is not exist in userId:[" + userIdx + "].");
+        }
+        res.json(result);
     })
-  });
+});
 
-router.post('/save/:userId', function (req, res, next) {
+router.post('/save/:databaseName', auth, (req, res, next) => {
+    let userIdx = req.decoded.userIdx;
     Users.findOne({
         where: {
-            idx: req.params.userId
+            idx: userIdx
         },
     }).then((result) => {
         if (result == null) {
-            console.error("userId:[" + req.params.userId + "] is not exist.");
-            res.send("userId:[" + req.params.userId + "] is not exist.");
+            console.error("userIdx:[" + userIdx + "] is not exist.");
+            res.send("userIdx:[" + userIdx + "] is not exist.");
         }
-        else {
-            Erd.findOne({
-                where: {
-                    user_idx: req.params.userId,
-                    database_name: req.body.databaseName
-                }
-            }).then((result) => {
-                if (result == null) {
-                    console.error("databaseName:[" + req.body.databaseName + "] is not exist in userId:[" + req.params.userId + "]");
-                    res.send("databaseName:[" + req.body.databaseName + "] is not exist in userId:[" + req.params.userId + "]");
-                }
-                Erd.update({ erd_json: req.body.erdJson },
-                    {
-                        where: { user_idx: req.params.userId, database_name: req.body.databaseName }
-                    })
-                    .then((result) => {
-                        res.send(result);
-                    })
-                    .catch((err) => {
-                        console.error("erd/save/:userId update fail " + err);
-                        res.send("erd/save/:userId update fail " + err);
-                    });
-            }).catch((err) => {
-                console.error(err);
-                res.json(err);
-            })
-        }
+        Erd.findOne({
+            where: {
+                user_idx: userIdx,
+                database_name: req.params.databaseName
+            }
+        }).then((result) => {
+            if (result == null) {
+                console.error("databaseName:[" + req.params.databaseName + "] is not exist in userId:[" + userIdx + "]");
+                res.send("databaseName:[" + req.params.databaseName + "] is not exist in userId:[" + userIdx + "]");
+            }
+            Erd.update({ erd_json: req.body.erdJson },
+                {
+                    where: { user_idx: userIdx, database_name: req.params.databaseName }
+                })
+                .then((result) => {
+                    res.send(result);
+                })
+                .catch((err) => {
+                    console.error("erd/save/:databaseName update fail " + err);
+                    res.send("erd/save/:databaseName update fail " + err);
+                });
+        }).catch((err) => {
+            console.error(err);
+            res.json(err);
+        })
     })
         .catch((err) => {
             console.error(err);

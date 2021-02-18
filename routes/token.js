@@ -21,7 +21,7 @@ router.post('/get/:userHash', async (req, res) => {
           userIdx: user.idx,
           result:result
         }, process.env.JWT_SECRET, {
-          expiresIn: '1m', // 1분
+          expiresIn: '30m', // 1분
           issuer: '토큰발급자',
         });
         return res.json({
