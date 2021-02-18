@@ -2,7 +2,22 @@ const express = require('express');
 const router = express.Router();
 const Users = require('../models').users;
 const Erd = require('../models').erd;
-/* GET users listing. */
+const { auth } = require('./authMiddleware');
+
+router.post('/get/:databaseName', auth, (req, res) => {
+    let databaseName = req.params.databaseName;
+    let userIdx = req.decoded.userIdx;
+    Erd.findOne({
+      where: { user_idx: userIdx, database_name: databaseName }
+    }).then((result) => {
+      if(result == null) {
+        console.error("databaseName:[" + databaseName + "] is not exist in userId:["+userIdx+"].");
+        res.send("databaseName:[" + databaseName + "] is not exist in userId:["+userIdx+"].");
+      }
+      res.json(result);
+    })
+  });
+
 router.post('/save/:userId', function (req, res, next) {
     Users.findOne({
         where: {

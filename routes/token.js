@@ -6,40 +6,55 @@ const router = express.Router();
 const { auth } = require('./authMiddleware');
 require('dotenv').config();
 
-router.post('/:userHash', async (req, res) => {
-    try {
-      // 대충 DB에서 사용자 정보를 찾는 코드: 대충 id, nick 정보를 찾았다고 가정
-      // API 키를 발급하여 사용하면 좋음(?)
-      const id = 'myId';
-      const nick = 'myNick';
-  
-      // jwt.sign() 메소드: 토큰 발급
-      const token = jwt.sign({
-        id,
-        nick,
-      }, process.env.JWT_SECRET, {
-        expiresIn: '1m', // 1분
-        issuer: '토큰발급자',
-      });
-  
-      return res.json({
-        code: 200,
-        message: '토큰이 발급되었습니다.',
-        token,
-      });
+router.post('/get/:userHash', async (req, res) => {
+  try {
+    Users.findOne({
+      where: { idx: req.params.userHash }
+    }).then((user) => {
+      if (user == null) res.send("userHash:[" + req.params.userHash + "] is not exits.");
+
+      Erd.findAll({
+        where: { user_idx: user.idx }
+      }).then((erd) => {
+        const result = erd.map((val) => val.database_name);
+        const token = jwt.sign({
+          userIdx: user.idx,
+          result:result
+        }, process.env.JWT_SECRET, {
+          expiresIn: '1m', // 1분
+          issuer: '토큰발급자',
+        });
+        return res.json({
+          code: 200,
+          message: '토큰이 발급되었습니다.',
+          token,
+        });
+      }).catch((err) => {
+        console.error(err);
+      })
+    });
+  }
+  catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      code: 500,
+      message: '서버 에러',
+    });
+  }
+});
+
+router.post('/test', auth, (req, res) => {
+  let databaseName = req.body.databaseName;
+  let userIdx = req.decoded.userIdx;
+  Erd.findOne({
+    where: { user_idx: userIdx, database_name: databaseName }
+  }).then((result) => {
+    if(result == null) {
+      console.error("databaseName:[" + databaseName + "] is not exist in userId:["+userIdx+"].");
+      res.send("databaseName:[" + databaseName + "] is not exist in userId:["+userIdx+"].");
     }
-    catch (error) {
-      console.error(error);
-      return res.status(500).json({
-        code: 500,
-        message: '서버 에러',
-      });
-    }
-  });
-  
-  // 발급된 토큰을 테스트하는 라우터
-  router.get('/test', auth, (req, res) => {
-    res.json(req.decoded);
-  });
-  
-  module.exports = router;
+    res.json(result);
+  })
+});
+
+module.exports = router;
