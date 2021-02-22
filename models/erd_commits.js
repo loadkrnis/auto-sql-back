@@ -25,6 +25,7 @@ module.exports = function(sequelize, DataTypes) {
     created_at: {
       type: DataTypes.DATE,
       allowNull: false,
+      defalutValue: sequelize.literal('now()'),
       comment: "생성일"
     }
   }, {
