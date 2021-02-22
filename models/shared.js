@@ -1,14 +1,21 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('SequelizeMeta', {
+  return sequelize.define('shared', {
+    id: {
+      autoIncrement: true,
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      primaryKey: true,
+      comment: "고유번호"
+    },
     name: {
       type: DataTypes.STRING(255),
       allowNull: false,
-      primaryKey: true
+      comment: "그룹이름"
     }
   }, {
     sequelize,
-    tableName: 'SequelizeMeta',
+    tableName: 'shared',
     timestamps: false,
     indexes: [
       {
@@ -16,15 +23,7 @@ module.exports = function(sequelize, DataTypes) {
         unique: true,
         using: "BTREE",
         fields: [
-          { name: "name" },
-        ]
-      },
-      {
-        name: "name",
-        unique: true,
-        using: "BTREE",
-        fields: [
-          { name: "name" },
+          { name: "id" },
         ]
       },
     ]

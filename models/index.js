@@ -33,6 +33,13 @@ Object.keys(db).forEach(modelName => {
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
-db.users = require('./User')(sequelize, Sequelize);
-db.erd = require('./erd')(sequelize, Sequelize);
+db.users = require('./users')(sequelize, Sequelize);
+db.erds = require('./erds')(sequelize, Sequelize);
+db.erd_commits = require('./erd_commits')(sequelize, Sequelize);
+db.plan_infomations = require('./plan_infomations')(sequelize, Sequelize);
+db.shared_erds = require('./shared_erds')(sequelize, Sequelize);
+db.shared_usrs = require('./shared_users')(sequelize, Sequelize);
+db.shard = require('./shared')(sequelize, Sequelize);
+db.user_payments = require('./user_payments')(sequelize, Sequelize);
+db.user_plan = require('./user_plans')(sequelize, Sequelize);
 module.exports = db;

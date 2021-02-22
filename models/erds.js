@@ -1,35 +1,30 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('erd', {
-    idx: {
+  return sequelize.define('erds', {
+    id: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true,
-      comment: "idx"
+      comment: "고유번호"
     },
-    user_idx: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      comment: "user_idx",
-      references: {
-        model: 'User',
-        key: 'idx'
-      }
-    },
-    erd_json: {
-      type: DataTypes.JSON,
-      allowNull: false,
-      comment: "erd_json"
-    },
-    database_name: {
+    name: {
       type: DataTypes.STRING(255),
       allowNull: false,
-      comment: "database_name"
+      comment: "erd 이름"
+    },
+    user_id: {
+      type: DataTypes.STRING(255),
+      allowNull: false,
+      comment: "생성자의 유저해쉬이메일",
+      references: {
+        model: 'users',
+        key: 'hashed_email'
+      }
     }
   }, {
     sequelize,
-    tableName: 'erd',
+    tableName: 'erds',
     timestamps: false,
     indexes: [
       {
@@ -37,14 +32,14 @@ module.exports = function(sequelize, DataTypes) {
         unique: true,
         using: "BTREE",
         fields: [
-          { name: "idx" },
+          { name: "id" },
         ]
       },
       {
-        name: "FK_erd_user_idx_User_idx",
+        name: "FK_erds_user_id_users_hashed_email",
         using: "BTREE",
         fields: [
-          { name: "user_idx" },
+          { name: "user_id" },
         ]
       },
     ]

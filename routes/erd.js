@@ -1,8 +1,33 @@
 const express = require('express');
 const router = express.Router();
 const Users = require('../models').users;
-const Erd = require('../models').erd;
-const { auth } = require('./authMiddleware');
+const Erds = require('../models').erds;
+const { auth, authOnlyAccessToken } = require('./authMiddleware');
+
+router.get('/name-list', authOnlyAccessToken, (req, res) => {
+    Users.findOne({
+        where: { hashed_email: req.decoded.hashed_email }
+    }).then((user) => {
+        if (user == null) res.status(400).send({ error: "hashedEmail:[" + req.decoded.hashed_email + "] is not exits." });
+        else {
+            Erds.findAll({
+                where: { user_id: req.decoded.hashed_email }
+            }).then((erd) => {
+                const result = erd.map((val) => val.name);
+                res.json({
+                    code: 200,
+                    result
+                });
+            });
+        }
+    }).catch((err) => {
+        console.error(err);
+        res.status(400).json({
+            code: 400,
+            err
+        });
+    });
+});
 
 router.post('/get/:databaseName', auth, (req, res) => {
     let databaseName = req.params.databaseName;
