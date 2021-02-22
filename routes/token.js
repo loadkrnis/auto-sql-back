@@ -21,7 +21,7 @@ router.post('/get/:userHash', async (req, res) => {
           userIdx: user.idx,
           result:result
         }, process.env.JWT_SECRET, {
-          expiresIn: '30m', // 1분
+          expiresIn: '1m', // 1분
           issuer: '토큰발급자',
         });
         return res.json({
@@ -43,18 +43,8 @@ router.post('/get/:userHash', async (req, res) => {
   }
 });
 
-router.post('/test', auth, (req, res) => {
-  let databaseName = req.body.databaseName;
-  let userIdx = req.decoded.userIdx;
-  Erd.findOne({
-    where: { user_idx: userIdx, database_name: databaseName }
-  }).then((result) => {
-    if(result == null) {
-      console.error("databaseName:[" + databaseName + "] is not exist in userId:["+userIdx+"].");
-      res.send("databaseName:[" + databaseName + "] is not exist in userId:["+userIdx+"].");
-    }
-    res.json(result);
-  })
+router.get('/test', auth, (req, res) => {
+  res.json(req.decoded);
 });
 
 module.exports = router;
