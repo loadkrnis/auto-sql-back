@@ -23,9 +23,9 @@ module.exports = function(sequelize, DataTypes) {
       comment: "erd의 json 데이터"
     },
     created_at: {
-      type: DataTypes.DATE,
+      type: Sequelize.DATE,
       allowNull: false,
-      defalutValue: sequelize.literal('now()'),
+      defaultValue: sequelize.literal('now()'),
       comment: "생성일"
     }
   }, {

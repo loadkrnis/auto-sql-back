@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Users = require('../models').users;
 const Erds = require('../models').erds;
+const ErdCommits = require('../models').erd_commits;
 const { auth, authOnlyAccessToken } = require('./authMiddleware');
 
 /*
@@ -10,16 +11,23 @@ const { auth, authOnlyAccessToken } = require('./authMiddleware');
     "name":"erd_name",
 }
 */
-router.post('/', authOnlyAccessToken, (req, res) => {
-    const emptyErd = { "canvas": { "width": 2000, "height": 2000, "scrollTop": 0, "scrollLeft": 0, "show": { "tableComment": true, "columnComment": true, "columnDataType": true, "columnDefault": true, "columnAutoIncrement": false, "columnPrimaryKey": true, "columnUnique": false, "columnNotNull": true, "relationship": true }, "database": "MySQL", "databaseName": "", "canvasType": "ERD", "language": "GraphQL", "tableCase": "pascalCase", "columnCase": "camelCase", "setting": { "relationshipDataTypeSync": true, "columnOrder": ["columnName", "columnDataType", "columnNotNull", "columnUnique", "columnAutoIncrement", "columnDefault", "columnComment"] } }, "table": { "tables": [], "indexes": [] }, "memo": { "memos": [] }, "relationship": { "relationships": [] } };
+router.post('', authOnlyAccessToken, (req, res) => {
+    const emptyErd = { "canvas": { "width": 2000, "height": 2000, "scrollTop": 0, "scrollLeft": 0, "show": { "tableComment": true, "columnComment": true, "columnDataType": true, "columnDefault": true, "columnAutoIncrement": false, "columnPrimaryKey": true, "columnUnique": false, "columnNotNull": true, "relationship": true }, "database": "MySQL", "databaseName": "", "canvasType": "ERD", "language": "GraphQL", "tableCase": "pascalCase", "columnCase": "camelCase", "setting": { "relationshipDataTypeSync": true, "columnOrder": ["columnName", "columnDataType", "columnNotNull", "columnUnique", "columnAutoIncrement", "columnDefault", "columnComment"] } }, "table": { "tables": [], "indexes": [] }, "memo": { "memos": [] }, "relationship": { "relationships": [] } }; //default ERD JSON
     const erdName = req.body.name;
-    // Erds.
     Erds.create({
         name: erdName,
         user_id: req.hashedEmail
-    }).then((result) => {
-        res.json(result);
-    })
+    }).then((erd) => {
+        ErdCommits.create({
+            erd_id: erd.id,
+            data: emptyErd,
+        }).then(() => {
+            res.json({
+                code: 200,
+                result: erd // ERDS테이블에 INSERT 된 결과
+            });
+        })
+    });
 });
 
 // [GET] /erd/name-list
