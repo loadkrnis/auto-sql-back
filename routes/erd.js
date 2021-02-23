@@ -6,13 +6,13 @@ const ErdCommits = require('../models').erd_commits;
 const { auth, authOnlyAccessToken } = require('./authMiddleware');
 
 /*
-[POST] /erd
+[POST] /erd/
 {
     "name":"erd_name",
 }
 emptyErd의 show를 수정하면 기본설정값 변경 가능
 */
-router.post('', authOnlyAccessToken, (req, res) => {
+router.post('/', authOnlyAccessToken, (req, res) => {
     const emptyErd = { "canvas": { "width": 2000, "height": 2000, "scrollTop": 0, "scrollLeft": 0, "show": { "tableComment": true, "columnComment": true, "columnDataType": true, "columnDefault": true, "columnAutoIncrement": false, "columnPrimaryKey": true, "columnUnique": false, "columnNotNull": true, "relationship": true }, "database": "MySQL", "databaseName": "", "canvasType": "ERD", "language": "GraphQL", "tableCase": "pascalCase", "columnCase": "camelCase", "setting": { "relationshipDataTypeSync": true, "columnOrder": ["columnName", "columnDataType", "columnNotNull", "columnUnique", "columnAutoIncrement", "columnDefault", "columnComment"] } }, "table": { "tables": [], "indexes": [] }, "memo": { "memos": [] }, "relationship": { "relationships": [] } }; //default ERD JSON
     const erdName = req.body.name;
     Erds.create({
