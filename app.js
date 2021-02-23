@@ -7,6 +7,7 @@ var indexRouter = require('./routes/index');
 // var usersRouter = require('./routes/users');
 // var loginRouter = require('./routes/login');
 var erdRouter = require('./routes/erd');
+var commitRouter = require('./routes/commit');
 var tokenRouter = require('./routes/token');
 var sequelize = require('./models').sequelize;
 var app = express();
@@ -37,6 +38,7 @@ app.use('/', indexRouter);
 // app.use('/users', usersRouter);
 // app.use('/login', loginRouter);
 app.use('/erd', erdRouter);
+app.use('/commit', commitRouter);
 app.use('/token', tokenRouter);
 
 // catch 404 and forward to error handler
