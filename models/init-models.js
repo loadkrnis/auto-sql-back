@@ -32,6 +32,8 @@ function initModels(sequelize) {
   shared.hasMany(shared_users, { as: "shared_users", foreignKey: "shared_id"});
   erds.belongsTo(users, { as: "user", foreignKey: "user_id"});
   users.hasMany(erds, { as: "erds", foreignKey: "user_id"});
+  shared.belongsTo(users, { as: "user", foreignKey: "user_id"});
+  users.hasMany(shared, { as: "shareds", foreignKey: "user_id"});
   shared_users.belongsTo(users, { as: "user", foreignKey: "user_id"});
   users.hasMany(shared_users, { as: "shared_users", foreignKey: "user_id"});
   user_payments.belongsTo(users, { as: "user", foreignKey: "user_id"});

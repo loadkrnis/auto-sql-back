@@ -12,6 +12,15 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.STRING(255),
       allowNull: false,
       comment: "그룹이름"
+    },
+    user_id: {
+      type: DataTypes.STRING(255),
+      allowNull: false,
+      comment: "마스터",
+      references: {
+        model: 'users',
+        key: 'hashed_email'
+      }
     }
   }, {
     sequelize,
@@ -24,6 +33,13 @@ module.exports = function(sequelize, DataTypes) {
         using: "BTREE",
         fields: [
           { name: "id" },
+        ]
+      },
+      {
+        name: "FK_shared_user_id_users_hashed_email",
+        using: "BTREE",
+        fields: [
+          { name: "user_id" },
         ]
       },
     ]
