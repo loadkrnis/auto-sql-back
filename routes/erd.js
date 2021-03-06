@@ -31,8 +31,8 @@ router.post('/', authOnlyAccessToken, (req, res) => {
     });
 });
 
-// [GET] /erd/name-list
-router.get('/name-list', authOnlyAccessToken, (req, res) => {
+// [GET] /erd/list
+router.get('/list', authOnlyAccessToken, (req, res) => {
     Users.findOne({
         where: { hashed_email: req.decoded.hashed_email }
     }).then((user) => {
@@ -41,13 +41,62 @@ router.get('/name-list', authOnlyAccessToken, (req, res) => {
             Erds.findAll({
                 where: { user_id: req.decoded.hashed_email }
             }).then((erd) => {
-                const result = erd.map((val) => val.name);
+                const result = erd.map((val) => {return {erdId:val.id ,erdName:val.name}});
                 res.json({
                     code: 200,
                     result
                 });
             });
         }
+    }).catch((err) => {
+        console.error(err);
+        res.status(400).json({
+            code: 400,
+            err
+        });
+    });
+});
+
+// [GET] /erd/list
+router.get('/:erdId/force', authOnlyAccessToken, (req, res) => {
+    Erds.findOne({
+        where: { id:req.params.erdId, user_id:req.hashedEmail }
+    }).then((erd) => {
+        if (erd == null) res.status(400).send({ error: "erd_id:[" + req.params.erdId + "] is not exits." });
+            ErdCommits.findAll({
+                where: { erd_id: req.params.erdId },
+                order: [['created_at', 'DESC']]
+            }).then((commit) => {
+                const result = commit.map((val) => {return {erdId:val.erd_id ,createdAt:val.createAt, data:val.data}});
+                res.json({
+                    code: 200,
+                    result
+                });
+            });
+    }).catch((err) => {
+        console.error(err);
+        res.status(400).json({
+            code: 400,
+            err
+        });
+    });
+});
+
+// [GET] /erd/list
+router.get('/:erdId/:commitId', authOnlyAccessToken, (req, res) => {
+    Erds.findOne({
+        where: { id:req.params.erdId, user_id:req.hashedEmail }
+    }).then((erd) => {
+        if (erd == null) res.status(400).send({ error: "erd_id:[" + req.params.erdId + "] is not exits." });
+            ErdCommits.findAll({
+                where: { erd_id: req.params.erdId, id:req.params.commitId }
+            }).then((commit) => {
+                const result = commit.map((val) => {return {erdId:val.erd_id ,createdAt:val.createAt, data:val.data}});
+                res.json({
+                    code: 200,
+                    result
+                });
+            });
     }).catch((err) => {
         console.error(err);
         res.status(400).json({
