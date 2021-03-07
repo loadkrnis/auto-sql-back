@@ -29,4 +29,27 @@ router.post('/:erdName', authOnlyAccessToken, (req, res) => {
     })
 });
 
+/*
+[GET] /commit/:erdName
+*/
+router.get('/:erdName', authOnlyAccessToken, async (req, res) => {
+    const erdName = req.params.erdName;
+    const erdId = await Erds.findOne({
+        where: { user_id: req.hashedEmail, name: erdName }
+    }).then((erd) => {
+        if (erd == null) res.status(400).send({ error: "erdName:[" + req.params.erdName + "] is not exit in userId[" + req.hashedEmail + "]" });
+        return erd.id;
+    });
+    ErdCommits.findAll({
+        where: {erd_id: erdId,},
+        order: [['created_at', 'DESC']]
+    }).then((commit) => {
+        const result = commit.map((val) => { return { commitId: val.id, createdAt: val.created_at } });
+        res.json({
+            code: 200,
+            result
+        });
+    })
+});
+
 module.exports = router;

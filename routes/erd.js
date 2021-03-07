@@ -57,7 +57,7 @@ router.get('/list', authOnlyAccessToken, (req, res) => {
     });
 });
 
-// [GET] /erd/list
+// [GET] /erd/:erdId/force
 router.get('/:erdId/force', authOnlyAccessToken, (req, res) => {
     Erds.findOne({
         where: { id:req.params.erdId, user_id:req.hashedEmail }
@@ -82,7 +82,7 @@ router.get('/:erdId/force', authOnlyAccessToken, (req, res) => {
     });
 });
 
-// [GET] /erd/list
+// [GET] /erd/:erdId/:commitId
 router.get('/:erdId/:commitId', authOnlyAccessToken, (req, res) => {
     Erds.findOne({
         where: { id:req.params.erdId, user_id:req.hashedEmail }
@@ -91,7 +91,7 @@ router.get('/:erdId/:commitId', authOnlyAccessToken, (req, res) => {
             ErdCommits.findAll({
                 where: { erd_id: req.params.erdId, id:req.params.commitId }
             }).then((commit) => {
-                const result = commit.map((val) => {return {erdId:val.erd_id ,createdAt:val.createAt, data:val.data}});
+                const result = commit.map((val) => {return {commitId:val.id ,createdAt:val.created_at, data:val.data}});
                 res.json({
                     code: 200,
                     result
