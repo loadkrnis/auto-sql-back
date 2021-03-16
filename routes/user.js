@@ -7,11 +7,9 @@ const SharedUsers = require('../models').shared_users;
 const SharedErds = require('../models').shared_erds;
 const Shared = require('../models').shard;
 const { auth, authOnlyAccessToken } = require('./authMiddleware');
+
 /*
-[POST] /commit/:erdName
-{
-    "hashedEmail": "hashedEmail"
-}
+[POST] /user
 */
 router.post('/', (req, res, next) => {
   let hashedEmail = req.body.hashedEmail;
@@ -33,6 +31,9 @@ router.post('/', (req, res, next) => {
   });
 })
 
+/*
+[DELETE] /user/:hashedEmail
+*/
 router.delete('/:hashedEmail', authOnlyAccessToken, async (req, res, next) => {
   let hashedEmail = req.params.hashedEmail;
   //authToken과 hashedEmail 값 비교
