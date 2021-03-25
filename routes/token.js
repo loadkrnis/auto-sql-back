@@ -20,7 +20,7 @@ router.get('/login/:hashedEmail', async (req, res) => {
             type: 'ACCESS',
             hashed_email: req.params.hashedEmail
           }, process.env.JWT_SECRET, {
-            expiresIn: '20m', // 1분
+            expiresIn: '60m', // 1분
             issuer: '토큰발급자',
           });
           const refreshToken = jwt.sign({
@@ -46,7 +46,11 @@ router.get('/login/:hashedEmail', async (req, res) => {
               res.send("[GET] erd/:hashedEmail fail =>" + err);
             });
       }
-    });
+    })
+	  .catch((error) => {
+		  console.log(error)
+		  res.send("Users.findOne catch =>" + error)
+	  })
   }
   catch (error) {
     console.error(error);
@@ -86,7 +90,11 @@ router.get('/reissue', auth, (req, res) => {
       message: '토큰이 재발급되었습니다.',
       accessToken
     });
-  });
+  })
+	.catch((error) => {
+		console.log(error)
+		res.send("User.findOne catch =>" + error)
+	})
 });
 
 module.exports = router;

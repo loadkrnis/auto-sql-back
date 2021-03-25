@@ -11,6 +11,7 @@ var commitRouter = require('./routes/commit');
 var tokenRouter = require('./routes/token');
 var sequelize = require('./models').sequelize;
 var app = express();
+const cors = require('cors')
 sequelize.sync();
 require('dotenv').config({ path : ".env" });
 require('date-utils');
@@ -28,6 +29,7 @@ app.all('/*', function(req, res, next) {
   res.header("Access-Control-Allow-Headers", "X-Requested-With");
   next();
 });
+app.use(cors())
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
