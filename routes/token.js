@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 const Users = require('../models').users;
 const Erds = require('../models').erds;
 const router = express.Router();
-const { auth } = require('./authMiddleware');
+const { authOnlyRefreshToken } = require('./authMiddleware');
 require('dotenv').config();
 
 /*
@@ -61,15 +61,9 @@ router.get('/login/:hashedEmail', async (req, res) => {
   }
 });
 
-router.get('/reissue', auth, (req, res) => {
-  if (req.decoded.type != "REFRESH") {
-    res.status(400).json({
-      code: 400,
-      message: '[Refresh]토큰이 아닙니다. 현재 토큰은 [' + req.decoded.type + ']토큰입니다.',
-    });
-  }
+router.get('/reissue', authOnlyRefreshToken, (req, res) => {
   Users.findOne({
-    where: { hashed_email: req.decoded.hashedEmail }
+    where: { hashed_email: req.hashedEmail }
   }).then((user) => {
     if (user.refresh_token != req.headers.authorization) {
       res.status(400).json({
@@ -79,8 +73,7 @@ router.get('/reissue', auth, (req, res) => {
     }
     const accessToken = jwt.sign({
       type: 'ACCESS',
-      hashed_email: req.params.hashedEmail,
-      result: result
+      hashed_email: req.hashedEmail
     }, process.env.JWT_SECRET, {
       expiresIn: '1m', // 1분
       issuer: '토큰발급자',
