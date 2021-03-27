@@ -5,7 +5,7 @@ const Erds = require('../models').erds;
 const ErdCommits = require('../models').erd_commits;
 const SharedErds = require('../models').shared_erds;
 const SharedUsers = require('../models').shared_users;
-const Shared = require('../models').shard;
+const Shared = require('../models').shared;
 const { auth, authOnlyAccessToken } = require('./authMiddleware');
 
 /*
@@ -126,7 +126,7 @@ router.delete('/:erdId', authOnlyAccessToken, async (req, res) => {
         await Shared.destroy({ where: { id: sharedId } });
     }
 
-    //
+    //ERD, commit 삭제
     console.log(sharedId);
     await Erds.findOne({
         where: { id: erdId }
