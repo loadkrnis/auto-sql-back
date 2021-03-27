@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 const Users = require('../models').users;
 const Erds = require('../models').erds;
 const router = express.Router();
-const { auth } = require('./authMiddleware');
+const { authOnlyRefreshToken } = require('./authMiddleware');
 require('dotenv').config();
 
 /*
@@ -20,7 +20,7 @@ router.get('/login/:hashedEmail', async (req, res) => {
             type: 'ACCESS',
             hashed_email: req.params.hashedEmail
           }, process.env.JWT_SECRET, {
-            expiresIn: '20m', // 1분
+            expiresIn: '60m', // 1분
             issuer: '토큰발급자',
           });
           const refreshToken = jwt.sign({
@@ -46,7 +46,11 @@ router.get('/login/:hashedEmail', async (req, res) => {
               res.send("[GET] erd/:hashedEmail fail =>" + err);
             });
       }
-    });
+    })
+	  .catch((error) => {
+		  console.log(error)
+		  res.send("Users.findOne catch =>" + error)
+	  })
   }
   catch (error) {
     console.error(error);
@@ -57,13 +61,7 @@ router.get('/login/:hashedEmail', async (req, res) => {
   }
 });
 
-router.get('/reissue', auth, (req, res) => {
-  if (req.decoded.type != "REFRESH") {
-    res.status(400).json({
-      code: 400,
-      message: '[Refresh]토큰이 아닙니다. 현재 토큰은 [' + req.decoded.type + ']토큰입니다.',
-    });
-  }
+router.get('/reissue', authOnlyRefreshToken, (req, res) => {
   Users.findOne({
     where: { hashed_email: req.hashedEmail }
   }).then((user) => {
@@ -85,7 +83,11 @@ router.get('/reissue', auth, (req, res) => {
       message: '토큰이 재발급되었습니다.',
       accessToken
     });
-  });
+  })
+	.catch((error) => {
+		console.log(error)
+		res.send("User.findOne catch =>" + error)
+	})
 });
 
 module.exports = router;
