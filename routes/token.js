@@ -75,7 +75,7 @@ router.get('/reissue', authOnlyRefreshToken, (req, res) => {
       type: 'ACCESS',
       hashed_email: req.hashedEmail
     }, process.env.JWT_SECRET, {
-      expiresIn: '1m', // 1분
+      expiresIn: '60m',
       issuer: '토큰발급자',
     });
     res.json({
