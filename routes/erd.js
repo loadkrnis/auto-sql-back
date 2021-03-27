@@ -5,6 +5,7 @@ const Erds = require('../models').erds;
 const ErdCommits = require('../models').erd_commits;
 const SharedErds = require('../models').shared_erds;
 const SharedUsers = require('../models').shared_users;
+const Shared = require('../models').shard;
 const { auth, authOnlyAccessToken } = require('./authMiddleware');
 
 /*
@@ -112,6 +113,7 @@ router.get('/:erdId/:commitId', authOnlyAccessToken, (req, res) => {
 router.delete('/:erdId', authOnlyAccessToken, async (req, res) => {
     const erdId = req.params.erdId;
 
+    //공유된 ERD 삭제
     const sharedId = await SharedErds.findOne({
         where: { erd_id: erdId }
     }).then((sharedErd) => {
@@ -121,11 +123,15 @@ router.delete('/:erdId', authOnlyAccessToken, async (req, res) => {
     if (sharedId != 0) {
         await SharedUsers.destroy({ where: { shared_id: sharedId } });
         await SharedErds.destroy({ where: { erd_id: erdId } });
+        await Shared.destroy({ where: { id: sharedId } });
     }
+
+    //
+    console.log(sharedId);
     await Erds.findOne({
-        where: erdId
+        where: { id: erdId }
     }).then((erd) => {
-        if (erd.id != req.hashedEmail) {
+        if (erd.user_id != req.hashedEmail) {
             res.status(400).json({
                 code: 400,
                 message: "토큰으로 보낸 hashedEmail과 Erd의 생성자가 일치하지 않습니다."

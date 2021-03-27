@@ -65,7 +65,7 @@ router.get('/reissue', auth, (req, res) => {
     });
   }
   Users.findOne({
-    where: { hashed_email: req.decoded.hashedEmail }
+    where: { hashed_email: req.hashedEmail }
   }).then((user) => {
     if (user.refresh_token != req.headers.authorization) {
       res.status(400).json({
@@ -75,8 +75,7 @@ router.get('/reissue', auth, (req, res) => {
     }
     const accessToken = jwt.sign({
       type: 'ACCESS',
-      hashed_email: req.params.hashedEmail,
-      result: result
+      hashed_email: req.hashedEmail
     }, process.env.JWT_SECRET, {
       expiresIn: '1m', // 1분
       issuer: '토큰발급자',
