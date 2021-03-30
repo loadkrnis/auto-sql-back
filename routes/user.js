@@ -50,20 +50,20 @@ router.delete('/:hashedEmail', authOnlyAccessToken, async (req, res, next) => {
     await SharedUsers.destroy({ where: { shared_id: selectShared } });
     await SharedErds.destroy({ where: { shared_id: selectShared } });
   }
-  await Shared.destroy({where: {user_id:hashedEmail}});
+  await Shared.destroy({ where: { user_id: hashedEmail } });
   let selectErdIds = await Erds.findAll({ where: { user_id: hashedEmail } })
     .then((result) => { return result.map((val) => val.id) });
   await ErdCommits.destroy({ where: { erd_id: selectErdIds } });
   await Erds.destroy({ where: { user_id: hashedEmail } });
   //유저가 공유받은 erd
-  await SharedUsers.destroy({ where: { user_id: hashedEmail } }); 
+  await SharedUsers.destroy({ where: { user_id: hashedEmail } });
   Users.destroy({ where: { hashed_email: hashedEmail } })
-  .then((result) => {
-    res.json({
-      code: 200,
-      result: result // USERS테이블에 삭제된 튜플 갯수
-    });
-  })
+    .then((result) => {
+      res.json({
+        code: 200,
+        result: result // USERS테이블에 삭제된 튜플 갯수
+      });
+    })
 });
 
 module.exports = router;
