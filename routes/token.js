@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 const Users = require('../models').users;
 const router = express.Router();
 const { authOnlyRefreshToken } = require('./authMiddleware');
-const process = require('dotenv').config();
+require('dotenv').config();
 
 /*
   [GET] erd/:hashedEmail

@@ -1,8 +1,9 @@
 module.exports = {
     "env": {
-        "browser": true,
+        "node": true,
         "commonjs": true,
-        "es2021": true,
+        "browser": true,
+        "es6": true,
     },
     "ignorePatterns": [
         "node_modules/",
