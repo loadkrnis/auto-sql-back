@@ -22,6 +22,15 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false,
       comment: "erd의 json 데이터"
     },
+    user_id: {
+      type: DataTypes.STRING(255),
+      allowNull: false,
+      comment: "commit 생성자",
+      references: {
+        model: 'users',
+        key: 'hashed_email'
+      }
+    },
     created_at: {
       type: DataTypes.DATE,
       allowNull: false,

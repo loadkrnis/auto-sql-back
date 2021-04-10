@@ -25,6 +25,7 @@ router.post('/', authOnlyAccessToken, (req, res) => {
         ErdCommits.create({
             erd_id: erd.id,
             data: emptyErd,
+            user_id: req.hashedEmail
         }).then(() => {
             res.json({
                 code: 200,

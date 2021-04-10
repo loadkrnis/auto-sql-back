@@ -40,7 +40,8 @@ function initModels(sequelize) {
   users.hasMany(user_payments, { as: "user_payments", foreignKey: "user_id"});
   user_plans.belongsTo(users, { as: "user", foreignKey: "user_id"});
   users.hasMany(user_plans, { as: "user_plans", foreignKey: "user_id"});
-
+  erd_commits.belongsTo(users, { as: "user", foreignKey: "user_id"});
+  users.hasMany(erd_commits, { as: "erd_commits", foreignKey: "user_id"});
   return {
     erd_commits,
     erds,
