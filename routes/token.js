@@ -19,7 +19,7 @@ router.get('/login/:hashedEmail', async (req, res) => {
           type: 'ACCESS',
           hashed_email: req.params.hashedEmail
         }, process.env.JWT_SECRET, {
-          expiresIn: '60m', // 1분
+          expiresIn: '1d', // 1분
           issuer: '토큰발급자',
         });
         const refreshToken = jwt.sign({
