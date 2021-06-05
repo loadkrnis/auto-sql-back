@@ -70,7 +70,17 @@ router.get('/list', authOnlyAccessToken, async (req, res) => {
                     await Erds.findOne({
                         where: { id: erdId }
                     }).then(erd => {
-                        result.push({ erdId: erd.id, erdName: erd.name, shared: true });
+                        if (erd.user_id != req.decoded.hashed_email) {
+                            result.push({ erdId: erd.id, erdName: erd.name, shared: true });
+                        }
+                        else {
+                            result.map(erdInfo => {
+                                if(erdInfo.erdId == erd.id) {
+                                    erdInfo.shared = true;
+                                    erdInfo.owner = true;
+                                }
+                            })
+                        }
                     });
                 })
             );
