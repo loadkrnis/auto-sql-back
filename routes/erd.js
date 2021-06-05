@@ -62,11 +62,9 @@ router.get('/list', authOnlyAccessToken, async (req, res) => {
                     }).then(erd => {
                         return erd.erd_id;
                     });
-                    console.log(erdId);
                     return erdId;
                 })
             );
-            console.log(erdIds);
             await Promise.all(
                 erdIds.map(async (erdId) => {
                     await Erds.findOne({
@@ -157,7 +155,6 @@ router.delete('/:erdId', authOnlyAccessToken, async (req, res) => {
     }
 
     //ERD, commit 삭제
-    console.log(sharedId);
     await Erds.findOne({
         where: { id: erdId }
     }).then((erd) => {
