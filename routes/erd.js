@@ -36,20 +36,49 @@ router.post('/', authOnlyAccessToken, (req, res) => {
 });
 
 // [GET] /erd/list
-router.get('/list', authOnlyAccessToken, (req, res) => {
+router.get('/list', authOnlyAccessToken, async (req, res) => {
     Users.findOne({
         where: { hashed_email: req.decoded.hashed_email }
-    }).then((user) => {
+    }).then(async (user) => {
         if (user == null) res.status(400).send({ error: "hashedEmail:[" + req.decoded.hashed_email + "] is not exits." });
         else {
-            Erds.findAll({
+            let result = await Erds.findAll({
                 where: { user_id: req.decoded.hashed_email }
-            }).then((erd) => {
-                const result = erd.map((val) => { return { erdId: val.id, erdName: val.name } });
-                res.json({
-                    code: 200,
-                    result
-                });
+            }).then(async (erd) => {
+                let result = erd.map((val) => { return { erdId: val.id, erdName: val.name } });
+                return result;
+            });
+            sharedIds = await SharedUsers.findAll({
+                where: { user_id: req.decoded.hashed_email }
+            }).then(userList => {
+                if (userList == null) return null;
+                sharedIdResult = userList.map(value => value.shared_id);
+                return sharedIdResult;
+            });
+            erdIds = await Promise.all(
+                sharedIds.map(async (shared_id) => {
+                    let erdId = await SharedErds.findOne({
+                        where: { shared_id: shared_id }
+                    }).then(erd => {
+                        return erd.erd_id;
+                    });
+                    console.log(erdId);
+                    return erdId;
+                })
+            );
+            console.log(erdIds);
+            await Promise.all(
+                erdIds.map(async (erdId) => {
+                    await Erds.findOne({
+                        where: { id: erdId }
+                    }).then(erd => {
+                        result.push({ erdId: erd.id, erdName: erd.name, shared: true });
+                    });
+                })
+            );
+            res.json({
+                code: 200,
+                result
             });
         }
     }).catch((err) => {
