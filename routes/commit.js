@@ -45,11 +45,11 @@ router.get('/:erdName', authOnlyAccessToken, async (req, res) => {
         return erd.id;
     });
     ErdCommits.findAll({
-        where: { erd_id: erdId, },
-        order: [['created_at', 'DESC']]
+        where: { erd_id: erdId, }
     }).then((commit) => {
         const result = commit.map((val) => { return { commitId: val.id,createdWho:val.user_id ,createdAt: val.created_at } });
-        res.json({
+        console.log(result);
+        res.status(200).json({
             code: 200,
             result
         });
