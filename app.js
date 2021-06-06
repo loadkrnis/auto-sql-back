@@ -12,6 +12,12 @@ let tokenRouter = require('./routes/token');
 let sharedRouter = require('./routes/shared');
 let sequelize = require('./models').sequelize;
 let app = express();
+let bodyParser = require('body-parser');
+var jsonParser       = bodyParser.json({limit:1024*1024*20, type:'application/json'});
+var urlencodedParser = bodyParser.urlencoded({ extended:true,limit:1024*1024*20,type:'application/x-www-form-urlencoded' })
+
+app.use(jsonParser);
+app.use(urlencodedParser);
 const cors = require('cors')
 sequelize.sync();
 require('dotenv').config({ path: ".env" });
@@ -36,7 +42,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-
 app.use('/', indexRouter);
 app.use('/user', usersRouter);
 // app.use('/login', loginRouter);
