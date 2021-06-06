@@ -13,19 +13,23 @@ const { auth, authOnlyAccessToken } = require('./authMiddleware');
 */
 router.post('/:erdName', authOnlyAccessToken, (req, res) => {
     const erdName = req.params.erdName;
+    console.log(req.hashedEmail);
     Erds.findOne({
         where: { user_id: req.hashedEmail, name: erdName }
     }).then((erd) => {
         if (erd == null) res.status(400).send({ error: "erdName:[" + req.params.erdName + "] is not exit in userId[" + req.hashedEmail + "]" });
         ErdCommits.create({
             erd_id: erd.id,
-            data: req.body.data
+            data: req.body.data,
+            user_id:req.hashedEmail
         }).then((result) => {
             res.json({
                 code: 200,
                 result
             });
-        });
+        }).catch(err => {
+            console.log(err);
+        })
     })
 });
 
