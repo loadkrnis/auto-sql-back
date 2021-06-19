@@ -50,7 +50,7 @@ router.get('/invite/:user_id/:shared_id', async (req, res) => {
     shared_id = req.params.shared_id;
     SharedUsers.create({
         user_id: user_id,
-        shared_id: shared.id
+        shared_id: shared_id
     }).catch(err => {
         console.error(err);
         res.json(err);

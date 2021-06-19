@@ -103,9 +103,9 @@ router.get('/list', authOnlyAccessToken, async (req, res) => {
 router.get('/:erdId/force', authOnlyAccessToken, (req, res) => {
     Erds.findOne({
         where: { id: req.params.erdId, user_id: req.hashedEmail }
-    }).then((erd) => {
-        if (erd == null) res.status(400).send({ error: "erd_id:[" + req.params.erdId + "] is not exits." });
-        ErdCommits.findOne({
+    }).then(async (erd) => {
+        if (erd == null) return res.status(400).send({ error: "erd_id:[" + req.params.erdId + "] is not exits." });
+        result = await ErdCommits.findOne({
             where: { erd_id: req.params.erdId },
             order: [['created_at', 'DESC']],
             limit: 1,
@@ -115,21 +115,16 @@ router.get('/:erdId/force', authOnlyAccessToken, (req, res) => {
                 commitId: commit.id,
                 erdData: commit.data,
             }
-            console.log(result)
-            res.json({
-                code: 200,
-                result
-            });
+            return result
         }).catch(err => {
             console.log(err);
-        })
-    }).catch((err) => {
-        console.error(err);
-        res.status(400).json({
-            code: 400,
-            err
         });
-    });
+        console.log(result);
+        res.json({
+            code: 200,
+            result
+        });
+    })
 });
 
 // [GET] /erd/:erdId/:commitId
