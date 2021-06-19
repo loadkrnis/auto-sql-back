@@ -1,9 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const Users = require('../models').users;
 const Erds = require('../models').erds;
 const ErdCommits = require('../models').erd_commits;
-const { auth, authOnlyAccessToken } = require('./authMiddleware');
+const { authOnlyAccessToken } = require('./authMiddleware');
 
 /*
 [POST] /commit/:erdName

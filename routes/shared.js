@@ -1,16 +1,13 @@
 const express = require('express');
 const router = express.Router();
-const Users = require('../models').users;
-const Erds = require('../models').erds;
-const ErdCommits = require('../models').erd_commits;
 const Shared = require('../models').shared;
 const SharedErds = require('../models').shared_erds;
 const SharedUsers = require('../models').shared_users;
 const axios = require('axios')
-const { auth, authOnlyAccessToken } = require('./authMiddleware');
+const { authOnlyAccessToken } = require('./authMiddleware');
 
-router.post('/:erdName', async (req, res) => {
-    let userId = 'chandaley12';
+router.post('/:erdName', authOnlyAccessToken, async (req, res) => {
+    let userId = req.hashedEmail;
     let erdId = req.body.erd_id;
     let sharedName = req.body.shared_name;
     let teamList = req.body.team_list; // ['asd@asd.com', 'dsa@dsa.com'] -> 만든사람 제외
