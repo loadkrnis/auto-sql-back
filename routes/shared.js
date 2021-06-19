@@ -24,6 +24,10 @@ router.post('/:erdName', async (req, res) => {
     }).catch(err => {
         console.log(err);
     });
+    await SharedUsers.create({
+        user_id: req.hashedEmail,
+        shared_id: shared.id
+    });
     sucessList = {};
     await teamList.forEach(async userEmail => {
         await axios.post('https://node.meum.me/verify/autosql/invite', {
@@ -33,11 +37,9 @@ router.post('/:erdName', async (req, res) => {
         }).then(async (res) => {
             if (res.status == 200) {
                 sucessList[userEmail.split('@')[0]] = true;
-                console.log(sucessList);
             }
             else {
                 sucessList[userEmail.split('@')[0]] = false;
-                console.log(sucessList);
             }
         });
     });
