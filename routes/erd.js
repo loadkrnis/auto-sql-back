@@ -71,15 +71,17 @@ router.get('/list', authOnlyAccessToken, async (req, res) => {
                         where: { id: erdId }
                     }).then(erd => {
                         if (erd.user_id != req.decoded.hashed_email) {
-                            result.push({ erdId: erd.id, erdName: erd.name, shared: true });
+                            result.push({ erdId: erd.id, erdName: erd.name, shared: true, owner_id: erd.user_id });
                         }
                         else {
+                            
                             result.map(erdInfo => {
-                                if(erdInfo.erdId == erd.id) {
+                                if (erdInfo.erdId == erd.id) {
                                     erdInfo.shared = true;
                                     erdInfo.owner = true;
+                                    erdInfo.owner_id = erd.user_id;
                                 }
-                            })
+                            });
                         }
                     });
                 })
@@ -102,24 +104,26 @@ router.get('/list', authOnlyAccessToken, async (req, res) => {
 // 2021-06-07 1422I / chandaley12 / edit: ErdCommits.findOne, add: limit: 1
 router.get('/:erdId/force', authOnlyAccessToken, (req, res) => {
     Erds.findOne({
-        where: { id: req.params.erdId, user_id: req.hashedEmail }
+        where: { id: req.params.erdId }
     }).then(async (erd) => {
         if (erd == null) return res.status(400).send({ error: "erd_id:[" + req.params.erdId + "] is not exits." });
         result = await ErdCommits.findOne({
+            attributes: ['id', 'erd_id', 'created_at'],
             where: { erd_id: req.params.erdId },
             order: [['created_at', 'DESC']],
             limit: 1,
-        }).then((commit) => {
-            //const result = commit.map((val) => { return { erdId: val.erd_id, createdAt: val.createAt, data: val.data } });
+        }).then(async (commit) => {
+            data = await ErdCommits.findOne({
+                where: { id: commit.id }
+            }).then(lastCommit => lastCommit.data);
             let result = {
                 commitId: commit.id,
-                erdData: commit.data,
+                erdData: data,
             }
             return result
         }).catch(err => {
             console.log(err);
         });
-        console.log(result);
         res.json({
             code: 200,
             result
@@ -129,26 +133,34 @@ router.get('/:erdId/force', authOnlyAccessToken, (req, res) => {
 
 // [GET] /erd/:erdId/:commitId
 router.get('/:erdId/:commitId', authOnlyAccessToken, (req, res) => {
-    Erds.findOne({
-        where: { id: req.params.erdId, user_id: req.hashedEmail }
-    }).then((erd) => {
-        if (erd == null) res.status(400).send({ error: "erd_id:[" + req.params.erdId + "] is not exits." });
-        ErdCommits.findAll({
-            where: { erd_id: req.params.erdId, id: req.params.commitId }
-        }).then((commit) => {
-            const result = commit.map((val) => { return { commitId: val.id, createdAt: val.created_at, data: val.data } });
-            res.json({
-                code: 200,
-                result
-            });
+    ErdCommits.findOne({
+        where: { erd_id: req.params.erdId, id: req.params.commitId }
+    }).then(erd => {
+        res.json({
+            code: 200,
+            result:{ commitId: erd.id, createdAt: erd.created_at, data: erd.data }
         });
-    }).catch((err) => {
-        console.error(err);
-        res.status(400).json({
-            code: 400,
-            err
-        });
-    });
+    })
+    // Erds.findOne({
+    //     where: { id: req.params.erdId, user_id: req.hashedEmail }
+    // }).then((erd) => {
+    //     if (erd == null) res.status(400).send({ error: "erd_id:[" + req.params.erdId + "] is not exits." });
+    //     ErdCommits.findAll({
+    //         where: { erd_id: req.params.erdId, id: req.params.commitId }
+    //     }).then((commit) => {
+    //         const result = commit.map((val) => { return { commitId: val.id, createdAt: val.created_at, data: val.data } });
+    //         res.json({
+    //             code: 200,
+    //             result
+    //         });
+    //     });
+    // }).catch((err) => {
+    //     console.error(err);
+    //     res.status(400).json({
+    //         code: 400,
+    //         err
+    //     });
+    // });
 });
 
 // [DELETE] /erd/:erdId
