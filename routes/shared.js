@@ -47,13 +47,21 @@ router.post('/:erdName', authOnlyAccessToken, async (req, res) => {
 router.get('/invite/:user_id/:shared_id', async (req, res) => {
     user_id = req.params.user_id;
     shared_id = req.params.shared_id;
-    SharedUsers.create({
-        user_id: user_id,
-        shared_id: shared_id
-    }).catch(err => {
-        console.error(err);
-        res.json(err);
+    check = await SharedUsers.count({
+        where: {
+            user_id: user_id,
+            shared_id: shared_id
+        }
     });
+    if (check == 0) {
+        SharedUsers.create({
+            user_id: user_id,
+            shared_id: shared_id
+        }).catch(err => {
+            console.error(err);
+            res.json(err);
+        });
+    }
     res.redirect('https://erd.autosql.co.kr');
 });
 module.exports = router;
