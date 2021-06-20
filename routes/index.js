@@ -20,12 +20,25 @@ router.get('invite/:email/:userId/:sharedId', function (req, res, next) {
     user_id:userId,
     shared_id:sharedId
   }).then(result => {
-    res.redirect('https://autosql.ga');
+    res.redirect('https://autosql.co.kr');
   })
   // res.json({ email: email, userId: userId, sharedId: sharedId });
 });
 
+router.get('/landing/user', async function (req, res, next) {
+  count = await Users.count({ attributes:['hashed_email']});
+  res.json({ count });
+});
 
+router.get('/landing/erd', async function (req, res, next) {
+  count = await Erds.count({ attributes:['id']});
+  res.json({ count });
+});
+
+router.get('/landing/share', async function (req, res, next) {
+  count = await SharedErds.count({ attributes:['id']});
+  res.json({ count });
+});
 
 
 module.exports = router;
