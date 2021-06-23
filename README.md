@@ -38,11 +38,14 @@ Creating a database table structure with AutoSQL provides a variety of features 
 
 
 ### Import SQL
+![화면 기록 2021-06-23 오후 5 04 49](https://user-images.githubusercontent.com/45731301/123060602-d9646780-d445-11eb-8170-bbff25e000bf.gif)
 
 
 ### Export Class Model
 ![main_4](https://user-images.githubusercontent.com/45731301/123055697-209c2980-d441-11eb-8bd9-b4398af45cc0.gif)
 
 ### Data Visualizing
+![main_3](https://user-images.githubusercontent.com/45731301/123059095-69091680-d444-11eb-8f51-e20759471ab9.gif)
 
 ### Share
+
