@@ -30,22 +30,22 @@ Creating a database table structure with AutoSQL provides a variety of features 
 </p>
 
 ### Design ERD
-![main_1](https://user-images.githubusercontent.com/45731301/123056534-f6973700-d441-11eb-9d7a-b2d3a721e6e1.gif)
+![ezgif com-gif-maker (1)](https://user-images.githubusercontent.com/45731301/123593570-9f220e00-d829-11eb-813e-e4192562c8c8.gif)
 
 
 ### Export SQL
-![main_22](https://user-images.githubusercontent.com/45731301/123055525-f64a6c00-d440-11eb-9239-bb013c2ba2f1.gif)
+![ezgif com-gif-maker (6)](https://user-images.githubusercontent.com/45731301/123594934-45bade80-d82b-11eb-8519-d67458cb73c5.gif)
 
 
 ### Import SQL
-![화면 기록 2021-06-23 오후 5 04 49](https://user-images.githubusercontent.com/45731301/123060602-d9646780-d445-11eb-8170-bbff25e000bf.gif)
+![ezgif com-gif-maker (4)](https://user-images.githubusercontent.com/45731301/123594572-d7761c00-d82a-11eb-80a8-f0a1c7906868.gif)
 
 
 ### Export Class Model
-![main_4](https://user-images.githubusercontent.com/45731301/123055697-209c2980-d441-11eb-8bd9-b4398af45cc0.gif)
+![ezgif com-gif-maker (5)](https://user-images.githubusercontent.com/45731301/123594729-0a201480-d82b-11eb-875d-cd239615abc1.gif)
 
 ### Data Visualizing
-![main_3](https://user-images.githubusercontent.com/45731301/123059095-69091680-d444-11eb-8f51-e20759471ab9.gif)
+![ezgif com-gif-maker (2)](https://user-images.githubusercontent.com/45731301/123594102-4010c900-d82a-11eb-8805-db29a5907400.gif)
 
 ### Share
 
