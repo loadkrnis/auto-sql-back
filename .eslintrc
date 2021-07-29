@@ -1,0 +1,28 @@
+{
+    "root": true,
+    "extends": "eslint:recommended",
+    "env": {
+        "node": true,
+        "es6": true,
+        "jest/globals": true
+    },
+    "plugins": [
+        "jest"
+    ],
+    "parserOptions": {
+        "ecmaVersion": 8,
+        "sourceType": "module"
+    },
+    "ignorePatterns": ["node_modules/"],
+    "rules": {
+        "indent": ["error", 2, { "SwitchCase": 1 }],
+        "linebreak-style": ["error", "unix"],
+        "no-trailing-spaces": 2,
+        "eol-last": 2,
+        "space-in-parens": ["error", "never"],
+        "no-multiple-empty-lines": 1,
+        "space-infix-ops": "error",
+        "no-useless-escape": "off",
+        "require-atomic-updates": "off"
+    }
+}
