@@ -13,8 +13,8 @@ let sharedRouter = require('./routes/shared');
 let sequelize = require('./models').sequelize;
 let app = express();
 let bodyParser = require('body-parser');
-var jsonParser       = bodyParser.json({limit:1024*1024*20, type:'application/json'});
-var urlencodedParser = bodyParser.urlencoded({ extended:true,limit:1024*1024*20,type:'application/x-www-form-urlencoded' })
+var jsonParser = bodyParser.json({ limit: 1024 * 1024 * 20, type: 'application/json' });
+var urlencodedParser = bodyParser.urlencoded({ extended: true, limit: 1024 * 1024 * 20, type: 'application/x-www-form-urlencoded' })
 
 app.use(jsonParser);
 app.use(urlencodedParser);
@@ -56,7 +56,7 @@ app.use(function (req, res, next) {
 });
 
 // error handler
-app.use(function (err, req, res, next) {
+app.use(function (err, req, res) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};

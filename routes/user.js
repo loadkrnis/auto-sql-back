@@ -11,7 +11,7 @@ const { authOnlyAccessToken } = require('./authMiddleware');
 /*
 [POST] /user
 */
-router.post('/', (req, res, next) => {
+router.post('/', (req, res) => {
   let hashedEmail = req.body.hashedEmail;
   Users.create(
     {
@@ -34,7 +34,7 @@ router.post('/', (req, res, next) => {
 /*
 [DELETE] /user/:hashedEmail
 */
-router.delete('/:hashedEmail', authOnlyAccessToken, async (req, res, next) => {
+router.delete('/:hashedEmail', authOnlyAccessToken, async (req, res) => {
   let hashedEmail = req.params.hashedEmail;
   //authToken과 hashedEmail 값 비교
   if (req.hashedEmail != hashedEmail) {

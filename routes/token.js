@@ -34,16 +34,16 @@ router.get('/login/:hashedEmail', async (req, res) => {
           {
             where: { hashed_email: req.params.hashedEmail }
           }).then(() => {
-            res.json({
-              code: 200,
-              message: '토큰이 발급되었습니다.',
-              accessToken,
-              refreshToken,
-            });
-          }).catch((err) => {
-            console.error("[GET] erd/:hashedEmail fail =>" + err);
-            res.send("[GET] erd/:hashedEmail fail =>" + err);
+          res.json({
+            code: 200,
+            message: '토큰이 발급되었습니다.',
+            accessToken,
+            refreshToken,
           });
+        }).catch((err) => {
+          console.error("[GET] erd/:hashedEmail fail =>" + err);
+          res.send("[GET] erd/:hashedEmail fail =>" + err);
+        });
       }
     })
       .catch((error) => {
