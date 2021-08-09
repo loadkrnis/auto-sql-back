@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Erds = require('../models').erds;
 const ErdCommits = require('../models').erd_commits;
-const { authOnlyAccessToken } = require('./authMiddleware');
+const { authOnlyAccessToken } = require('../middlewares/authMiddleware');
 
 /*
 [POST] /commit/:erdName
@@ -13,7 +13,7 @@ const { authOnlyAccessToken } = require('./authMiddleware');
 router.post('/:erdName', authOnlyAccessToken, (req, res) => {
   const erdName = req.params.erdName;
   let owner = req.body.owner_id;
-  if(owner == "") {
+  if (owner == "") {
     owner = req.hashedEmail;
   }
   Erds.findOne({
@@ -23,7 +23,7 @@ router.post('/:erdName', authOnlyAccessToken, (req, res) => {
     ErdCommits.create({
       erd_id: erd.id,
       data: req.body.data,
-      user_id:req.hashedEmail
+      user_id: req.hashedEmail
     }).then((result) => {
       res.json({
         code: 200,
@@ -41,7 +41,7 @@ router.post('/:erdName', authOnlyAccessToken, (req, res) => {
 router.get('/:erdName/:owner_id', authOnlyAccessToken, async (req, res) => {
   const erdName = req.params.erdName;
   let owner = req.params.owner_id;
-  if(req.body.owner_id == "undefined") {
+  if (req.body.owner_id == "undefined") {
     owner = req.hashedEmail;
   }
   const erdId = await Erds.findOne({
@@ -53,7 +53,7 @@ router.get('/:erdName/:owner_id', authOnlyAccessToken, async (req, res) => {
   ErdCommits.findAll({
     where: { erd_id: erdId, }
   }).then((commit) => {
-    const result = commit.map((val) => { return { commitId: val.id,createdWho:val.user_id ,createdAt: val.created_at } });
+    const result = commit.map((val) => { return { commitId: val.id, createdWho: val.user_id, createdAt: val.created_at } });
     res.status(200).json({
       code: 200,
       result

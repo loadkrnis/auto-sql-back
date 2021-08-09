@@ -4,7 +4,7 @@ const Shared = require('../models').shared;
 const SharedErds = require('../models').shared_erds;
 const SharedUsers = require('../models').shared_users;
 const axios = require('axios')
-const { authOnlyAccessToken } = require('./authMiddleware');
+const { authOnlyAccessToken } = require('../middlewares/authMiddleware');
 
 router.post('/:erdName', authOnlyAccessToken, async (req, res) => {
   let userId = req.hashedEmail;

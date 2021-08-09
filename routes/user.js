@@ -6,7 +6,7 @@ const ErdCommits = require('../models').erd_commits;
 const SharedUsers = require('../models').shared_users;
 const SharedErds = require('../models').shared_erds;
 const Shared = require('../models').shard;
-const { authOnlyAccessToken } = require('./authMiddleware');
+const { authOnlyAccessToken } = require('../middlewares/authMiddleware');
 
 /*
 [POST] /user

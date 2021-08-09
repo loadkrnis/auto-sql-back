@@ -2,7 +2,7 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 const Users = require('../models').users;
 const router = express.Router();
-const { authOnlyRefreshToken } = require('./authMiddleware');
+const { authOnlyRefreshToken } = require('../middlewares/authMiddleware');
 require('dotenv').config();
 
 /*
@@ -30,10 +30,9 @@ router.get('/login/:hashedEmail', async (req, res) => {
           issuer: '토큰발급자',
         });
 
-        Users.update({ refresh_token: refreshToken },
-          {
-            where: { hashed_email: req.params.hashedEmail }
-          }).then(() => {
+        Users.update({ refresh_token: refreshToken }, {
+          where: { hashed_email: req.params.hashedEmail }
+        }).then(() => {
           res.json({
             code: 200,
             message: '토큰이 발급되었습니다.',
