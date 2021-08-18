@@ -5,12 +5,12 @@ module.exports = function (sequelize, DataTypes) {
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true,
-      comment: "고유번호"
+      comment: '고유번호'
     },
     user_id: {
       type: DataTypes.STRING(255),
       allowNull: false,
-      comment: "유저해쉬이메일",
+      comment: '유저해쉬이메일',
       references: {
         model: 'users',
         key: 'hashed_email'
@@ -19,7 +19,7 @@ module.exports = function (sequelize, DataTypes) {
     infomation: {
       type: DataTypes.TEXT,
       allowNull: false,
-      comment: "결제정보 (세분화 필요)"
+      comment: '결제정보 (세분화 필요)'
     }
   }, {
     sequelize,
@@ -27,18 +27,18 @@ module.exports = function (sequelize, DataTypes) {
     timestamps: false,
     indexes: [
       {
-        name: "PRIMARY",
+        name: 'PRIMARY',
         unique: true,
-        using: "BTREE",
+        using: 'BTREE',
         fields: [
-          { name: "id" },
+          { name: 'id' },
         ]
       },
       {
-        name: "FK_user_payments_user_id_users_hashed_email",
-        using: "BTREE",
+        name: 'FK_user_payments_user_id_users_hashed_email',
+        using: 'BTREE',
         fields: [
-          { name: "user_id" },
+          { name: 'user_id' },
         ]
       },
     ]

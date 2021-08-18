@@ -1,43 +1,43 @@
-let createError = require('http-errors');
-let express = require('express');
-let path = require('path');
-let cookieParser = require('cookie-parser');
-let logger = require('morgan');
-let indexRouter = require('./routes/index');
-let usersRouter = require('./routes/user');
+const createError = require('http-errors');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
+const indexRouter = require('./routes/index');
+const usersRouter = require('./routes/user');
 // let loginRouter = require('./routes/login');
-let erdRouter = require('./routes/erd');
-let commitRouter = require('./routes/commit');
-let tokenRouter = require('./routes/token');
-let sharedRouter = require('./routes/shared');
-let sequelize = require('./models').sequelize;
-let app = express();
-let bodyParser = require('body-parser');
-var jsonParser = bodyParser.json({ limit: 1024 * 1024 * 20, type: 'application/json' });
-var urlencodedParser = bodyParser.urlencoded({ extended: true, limit: 1024 * 1024 * 20, type: 'application/x-www-form-urlencoded' })
+const erdRouter = require('./routes/erd');
+const commitRouter = require('./routes/commit');
+const tokenRouter = require('./routes/token');
+const sharedRouter = require('./routes/shared');
+const sequelize = require('./models').sequelize;
+const app = express();
+const bodyParser = require('body-parser');
+const jsonParser = bodyParser.json({ limit: 1024 * 1024 * 20, type: 'application/json' });
+const urlencodedParser = bodyParser.urlencoded({ extended: true, limit: 1024 * 1024 * 20, type: 'application/x-www-form-urlencoded' });
 
 app.use(jsonParser);
 app.use(urlencodedParser);
-const cors = require('cors')
+const cors = require('cors');
 sequelize.sync();
-require('dotenv').config({ path: ".env" });
+require('dotenv').config({ path: '.env' });
 require('date-utils');
 
-//sequelize setup
+// sequelize setup
 
-//end point
+// end point
 
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 app.all('/*', function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "https://autosql.ga");
-  res.header("Access-Control-Allow-Headers", "X-Requested-With");
-  res.header("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE, PUT");
+  res.header('Access-Control-Allow-Origin', 'https://autosql.ga');
+  res.header('Access-Control-Allow-Headers', 'X-Requested-With');
+  res.header('Access-Control-Allow-Methods', 'POST, GET, OPTIONS, DELETE, PUT');
   next();
 });
-app.use(cors())
+app.use(cors());
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -66,7 +66,7 @@ app.use(function (err, req, res) {
   res.render('error');
 });
 
-let time = new Date();
-console.log("server restarted at " + time.toFormat("YYYY-MM-DD HH24:MI:SS"));
+const time = new Date();
+console.log('server restarted at ' + time.toFormat('YYYY-MM-DD HH24:MI:SS'));
 
 module.exports = app;

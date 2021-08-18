@@ -4,12 +4,12 @@ module.exports = function (sequelize, DataTypes) {
       type: DataTypes.STRING(255),
       allowNull: false,
       primaryKey: true,
-      comment: "유저 구글이메일 해시값"
+      comment: '유저 구글이메일 해시값'
     },
     refresh_token: {
       type: DataTypes.STRING(255),
       allowNull: true,
-      comment: "리프레시토큰"
+      comment: '리프레시토큰'
     }
   }, {
     sequelize,
@@ -17,11 +17,11 @@ module.exports = function (sequelize, DataTypes) {
     timestamps: false,
     indexes: [
       {
-        name: "PRIMARY",
+        name: 'PRIMARY',
         unique: true,
-        using: "BTREE",
+        using: 'BTREE',
         fields: [
-          { name: "hashed_email" },
+          { name: 'hashed_email' },
         ]
       },
     ]

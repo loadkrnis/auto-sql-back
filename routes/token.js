@@ -13,8 +13,9 @@ router.get('/login/:hashedEmail', async (req, res) => {
     Users.findOne({
       where: { hashed_email: req.params.hashedEmail }
     }).then((user) => {
-      if (user == null) res.status(400).send({ error: "hashedEmail:[" + req.params.hashedEmail + "] is not exits." });
-      else {
+      if (user == null) {
+        res.status(400).send({ error: 'hashedEmail:[' + req.params.hashedEmail + '] is not exits.' });
+      } else {
         const accessToken = jwt.sign({
           type: 'ACCESS',
           hashed_email: req.params.hashedEmail
@@ -40,17 +41,16 @@ router.get('/login/:hashedEmail', async (req, res) => {
             refreshToken,
           });
         }).catch((err) => {
-          console.error("[GET] erd/:hashedEmail fail =>" + err);
-          res.send("[GET] erd/:hashedEmail fail =>" + err);
+          console.error('[GET] erd/:hashedEmail fail =>' + err);
+          res.send('[GET] erd/:hashedEmail fail =>' + err);
         });
       }
     })
       .catch((error) => {
-        console.log(error)
-        res.send("Users.findOne catch =>" + error)
-      })
-  }
-  catch (error) {
+        console.log(error);
+        res.send('Users.findOne catch =>' + error);
+      });
+  } catch (error) {
     console.error(error);
     return res.status(500).json({
       code: 500,
@@ -83,9 +83,9 @@ router.get('/reissue', authOnlyRefreshToken, (req, res) => {
     });
   })
     .catch((error) => {
-      console.log(error)
-      res.send("User.findOne catch =>" + error)
-    })
+      console.log(error);
+      res.send('User.findOne catch =>' + error);
+    });
 });
 
 module.exports = router;

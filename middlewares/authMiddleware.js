@@ -7,7 +7,7 @@ exports.authOnlyRefreshToken = (req, res, next) => {
     // 요청 헤더에 저장된 토큰(req.headers.authorization)과 비밀키를 사용하여 토큰 반환
     req.decoded = jwt.verify(req.headers.authorization, process.env.JWT_SECRET);
     req.hashedEmail = req.decoded.hashed_email;
-    if (req.decoded.type != "REFRESH") {
+    if (req.decoded.type != 'REFRESH') {
       throw new Error('NotRefreshTokenError');
     }
     return next();
@@ -35,7 +35,7 @@ exports.authOnlyRefreshToken = (req, res, next) => {
       message: '[REFRESH]토큰이 아닙니다. 현재 토큰은 [' + req.decoded.type + ']토큰입니다.',
     });
   }
-}
+};
 
 exports.authOnlyAccessToken = (req, res, next) => {
   // 인증 완료
@@ -43,7 +43,7 @@ exports.authOnlyAccessToken = (req, res, next) => {
     // 요청 헤더에 저장된 토큰(req.headers.authorization)과 비밀키를 사용하여 토큰 반환
     req.decoded = jwt.verify(req.headers.authorization, process.env.JWT_SECRET);
     req.hashedEmail = req.decoded.hashed_email;
-    if (req.decoded.type != "ACCESS") {
+    if (req.decoded.type != 'ACCESS') {
       throw new Error('NotAccessTokenError');
     }
     return next();
@@ -70,4 +70,4 @@ exports.authOnlyAccessToken = (req, res, next) => {
       message: '[ACCESS]토큰이 아닙니다. 현재 토큰은 [' + req.decoded.type + ']토큰입니다.',
     });
   }
-}
+};

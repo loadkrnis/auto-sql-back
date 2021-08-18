@@ -5,12 +5,12 @@ module.exports = function (sequelize, DataTypes) {
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true,
-      comment: "고유번호"
+      comment: '고유번호'
     },
     user_id: {
       type: DataTypes.STRING(255),
       allowNull: false,
-      comment: "유저해쉬이메일",
+      comment: '유저해쉬이메일',
       references: {
         model: 'users',
         key: 'hashed_email'
@@ -19,7 +19,7 @@ module.exports = function (sequelize, DataTypes) {
     shared_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      comment: "그룹고유번호",
+      comment: '그룹고유번호',
       references: {
         model: 'shared',
         key: 'id'
@@ -31,25 +31,25 @@ module.exports = function (sequelize, DataTypes) {
     timestamps: false,
     indexes: [
       {
-        name: "PRIMARY",
+        name: 'PRIMARY',
         unique: true,
-        using: "BTREE",
+        using: 'BTREE',
         fields: [
-          { name: "id" },
+          { name: 'id' },
         ]
       },
       {
-        name: "FK_shared_users_user_id_users_hashed_email",
-        using: "BTREE",
+        name: 'FK_shared_users_user_id_users_hashed_email',
+        using: 'BTREE',
         fields: [
-          { name: "user_id" },
+          { name: 'user_id' },
         ]
       },
       {
-        name: "FK_shared_users_shared_id_shared_id",
-        using: "BTREE",
+        name: 'FK_shared_users_shared_id_shared_id',
+        using: 'BTREE',
         fields: [
-          { name: "shared_id" },
+          { name: 'shared_id' },
         ]
       },
     ]

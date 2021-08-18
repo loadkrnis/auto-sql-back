@@ -16,7 +16,7 @@ const { authOnlyAccessToken } = require('../middlewares/authMiddleware');
 emptyErd의 show를 수정하면 기본설정값 변경 가능
 */
 router.post('/', authOnlyAccessToken, (req, res) => {
-  const emptyErd = { "canvas": { "width": 2000, "height": 2000, "scrollTop": 0, "scrollLeft": 0, "show": { "tableComment": true, "columnComment": true, "columnDataType": true, "columnDefault": true, "columnAutoIncrement": false, "columnPrimaryKey": true, "columnUnique": false, "columnNotNull": true, "relationship": true }, "database": "MySQL", "databaseName": "", "canvasType": "ERD", "language": "GraphQL", "tableCase": "pascalCase", "columnCase": "camelCase", "setting": { "relationshipDataTypeSync": true, "columnOrder": ["columnName", "columnDataType", "columnNotNull", "columnUnique", "columnAutoIncrement", "columnDefault", "columnComment"] } }, "table": { "tables": [], "indexes": [] }, "memo": { "memos": [] }, "relationship": { "relationships": [] } }; //default ERD JSON
+  const emptyErd = { 'canvas': { 'width': 2000, 'height': 2000, 'scrollTop': 0, 'scrollLeft': 0, 'show': { 'tableComment': true, 'columnComment': true, 'columnDataType': true, 'columnDefault': true, 'columnAutoIncrement': false, 'columnPrimaryKey': true, 'columnUnique': false, 'columnNotNull': true, 'relationship': true }, 'database': 'MySQL', 'databaseName': '', 'canvasType': 'ERD', 'language': 'GraphQL', 'tableCase': 'pascalCase', 'columnCase': 'camelCase', 'setting': { 'relationshipDataTypeSync': true, 'columnOrder': ['columnName', 'columnDataType', 'columnNotNull', 'columnUnique', 'columnAutoIncrement', 'columnDefault', 'columnComment'] } }, 'table': { 'tables': [], 'indexes': [] }, 'memo': { 'memos': [] }, 'relationship': { 'relationships': [] } }; // default ERD JSON
   const erdName = req.body.name;
   Erds.create({
     name: erdName,
@@ -31,7 +31,7 @@ router.post('/', authOnlyAccessToken, (req, res) => {
         code: 200,
         result: erd // ERDS테이블에 INSERT 된 결과
       });
-    })
+    });
   });
 });
 
@@ -40,24 +40,29 @@ router.get('/list', authOnlyAccessToken, async (req, res) => {
   Users.findOne({
     where: { hashed_email: req.decoded.hashed_email }
   }).then(async (user) => {
-    if (user == null) res.status(400).send({ error: "hashedEmail:[" + req.decoded.hashed_email + "] is not exits." });
-    else {
-      let result = await Erds.findAll({
+    if (user == null) {
+      res.status(400).send({ error: 'hashedEmail:[' + req.decoded.hashed_email + '] is not exits.' });
+    } else {
+      const result = await Erds.findAll({
         where: { user_id: req.decoded.hashed_email }
       }).then(async (erd) => {
-        let result = erd.map((val) => { return { erdId: val.id, erdName: val.name } });
+        const result = erd.map((val) => {
+          return { erdId: val.id, erdName: val.name };
+        });
         return result;
       });
-      let sharedIds = await SharedUsers.findAll({
+      const sharedIds = await SharedUsers.findAll({
         where: { user_id: req.decoded.hashed_email }
       }).then(userList => {
-        if (userList == null) return null;
-        let sharedIdResult = userList.map(value => value.shared_id);
+        if (userList == null) {
+          return null;
+        }
+        const sharedIdResult = userList.map(value => value.shared_id);
         return sharedIdResult;
       });
-      let erdIds = await Promise.all(
+      const erdIds = await Promise.all(
         sharedIds.map(async (shared_id) => {
-          let erdId = await SharedErds.findOne({
+          const erdId = await SharedErds.findOne({
             where: { shared_id: shared_id }
           }).then(erd => {
             return erd.erd_id;
@@ -72,8 +77,7 @@ router.get('/list', authOnlyAccessToken, async (req, res) => {
           }).then(erd => {
             if (erd.user_id != req.decoded.hashed_email) {
               result.push({ erdId: erd.id, erdName: erd.name, shared: true, owner_id: erd.user_id });
-            }
-            else {
+            } else {
 
               result.map(erdInfo => {
                 if (erdInfo.erdId == erd.id) {
@@ -106,21 +110,23 @@ router.get('/:erdId/force', authOnlyAccessToken, (req, res) => {
   Erds.findOne({
     where: { id: req.params.erdId }
   }).then(async (erd) => {
-    if (erd == null) return res.status(400).send({ error: "erd_id:[" + req.params.erdId + "] is not exits." });
-    let result = await ErdCommits.findOne({
+    if (erd == null) {
+      return res.status(400).send({ error: 'erd_id:[' + req.params.erdId + '] is not exits.' });
+    }
+    const result = await ErdCommits.findOne({
       attributes: ['id', 'erd_id', 'created_at'],
       where: { erd_id: req.params.erdId },
       order: [['created_at', 'DESC']],
       limit: 1,
     }).then(async (commit) => {
-      let data = await ErdCommits.findOne({
+      const data = await ErdCommits.findOne({
         where: { id: commit.id }
       }).then(lastCommit => lastCommit.data);
-      let result = {
+      const result = {
         commitId: commit.id,
         erdData: data,
-      }
-      return result
+      };
+      return result;
     }).catch(err => {
       console.log(err);
     });
@@ -128,7 +134,7 @@ router.get('/:erdId/force', authOnlyAccessToken, (req, res) => {
       code: 200,
       result
     });
-  })
+  });
 });
 
 // [GET] /erd/:erdId/:commitId
@@ -140,7 +146,7 @@ router.get('/:erdId/:commitId', authOnlyAccessToken, (req, res) => {
       code: 200,
       result: { commitId: erd.id, createdAt: erd.created_at, data: erd.data }
     });
-  })
+  });
   // Erds.findOne({
   //     where: { id: req.params.erdId, user_id: req.hashedEmail }
   // }).then((erd) => {
@@ -167,11 +173,13 @@ router.get('/:erdId/:commitId', authOnlyAccessToken, (req, res) => {
 router.delete('/:erdId', authOnlyAccessToken, async (req, res) => {
   const erdId = req.params.erdId;
 
-  //공유된 ERD 삭제
+  // 공유된 ERD 삭제
   const sharedId = await SharedErds.findOne({
     where: { erd_id: erdId }
   }).then((sharedErd) => {
-    if (sharedErd == null) return 0;
+    if (sharedErd == null) {
+      return 0;
+    }
     return sharedErd.shared_id;
   });
   if (sharedId != 0) {
@@ -180,14 +188,14 @@ router.delete('/:erdId', authOnlyAccessToken, async (req, res) => {
     await Shared.destroy({ where: { id: sharedId } });
   }
 
-  //ERD, commit 삭제
+  // ERD, commit 삭제
   await Erds.findOne({
     where: { id: erdId }
   }).then((erd) => {
     if (erd.user_id != req.hashedEmail) {
       res.status(400).json({
         code: 400,
-        message: "토큰으로 보낸 hashedEmail과 Erd의 생성자가 일치하지 않습니다."
+        message: '토큰으로 보낸 hashedEmail과 Erd의 생성자가 일치하지 않습니다.'
       });
     }
   });
@@ -195,7 +203,7 @@ router.delete('/:erdId', authOnlyAccessToken, async (req, res) => {
   await Erds.destroy({ where: { id: erdId } });
   res.json({
     code: 200,
-    message: "성공적으로 삭제되었습니다."
+    message: '성공적으로 삭제되었습니다.'
   });
 });
 module.exports = router;
